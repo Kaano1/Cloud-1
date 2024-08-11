@@ -18,6 +18,9 @@ down:
 clean: down
 	$(CD) $(FCOMPOSE) && $(RM_IMAGE) && $(RM_VOLUME)
 
+reload:
+	bash setIp.sh
+
 re: clean up
 
 .PHONY: up down clean re
