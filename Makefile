@@ -3,8 +3,8 @@ FCOMPOSE = ./srcs/wordpress/wp-project/
 RM_VOLUME = docker volume prune -af
 RM_IMAGE = docker image prune -af
 RM_CONTAINER = docker container prune -af
-UP = docker compose up
-DOWN = docker compose down
+UP = docker-compose up
+DOWN = docker-compose down
 
 up:
 	$(CD) $(FCOMPOSE) && $(UP)
