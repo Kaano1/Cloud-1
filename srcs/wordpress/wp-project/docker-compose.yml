@@ -1,0 +1,70 @@
+name: cloud-1
+
+services:
+    wordpress:
+        container_name: wordpress
+        image: wordpress:php8.1-apache
+        restart: always
+        stdin_open: true
+        tty: true
+        environment:
+            WORDPRESS_DB_HOST: mysql
+            WORDPRESS_DB_USER: user
+            WORDPRESS_DB_PASSWORD: 1234
+            WORDPRESS_DB_NAME: wp_db
+        volumes:
+            - wordpress_data:/var/www/html
+            - ./wordpress:/var/www/html
+    mysql:
+        container_name: mysql
+        image: mysql
+        restart: always
+        environment:
+            MYSQL_DATABASE: wp_db
+            MYSQL_USER: user
+            MYSQL_PASSWORD: 1234
+            MYSQL_RANDOM_ROOT_PASSWORD: 'root_pass'
+        volumes:
+          - db_data:/var/lib/mysql
+        ports:
+            - 3306:3306
+    nginx:
+        container_name: nginx
+        image: nginx:latest
+        restart: unless-stopped
+        ports:
+            - 80:80
+        volumes:
+            - ./nginx/conf:/etc/nginx/conf.d
+    phpmyadmin:
+       image: phpmyadmin:latest
+       depends_on:
+         - mysql
+       environment:
+          PMA_HOST: mysql
+          PMA_PORT: 3306
+          APACHE_HTTP_PORT_NUMBER: 8080
+          MYSQL_ROOT_PASSWORD: 'root_pass'
+          MYSQL_USER: user
+          MYSQL_PASSWORD: 1234
+       ports:
+         - 8080:8080
+       command: /bin/bash -c "sed -i \"s/80/$$APACHE_HTTP_PORT_NUMBER/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && /docker-entrypoint.sh apache2-foreground"
+    certbot:
+        container_name: certbot
+        image: certbot/certbot:latest
+        stdin_open: true
+        tty: true
+        command: certonly --webroot --webroot-path=/var/www/html --email ahmetyumusakdiken13@gmail.com --agree-tos --no-eff-email -d www.fikrihavuz.com.tr -d www.fikrihavuz.com.tr
+        volumes:
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/logs:/var/log/letsencrypt
+            - ./certbot/data:/var/www/html
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: bind
+      device: /data/cloud
+  wordpress_data:
