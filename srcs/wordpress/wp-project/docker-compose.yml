@@ -32,10 +32,14 @@ services:
         container_name: nginx
         image: nginx:latest
         restart: unless-stopped
+        stdin_open: true
+        tty: true
         ports:
             - 80:80
         volumes:
             - ./nginx/conf:/etc/nginx/conf.d
+            - ./certbot/conf:/etc/nginx/ssl
+            - ./certbot/data:/var/www/html
     phpmyadmin:
        image: phpmyadmin:latest
        depends_on:
@@ -55,7 +59,7 @@ services:
         image: certbot/certbot:latest
         stdin_open: true
         tty: true
-        command: certonly --webroot --webroot-path=/var/www/html --email ahmetyumusakdiken13@gmail.com --agree-tos --no-eff-email -d www.fikrihavuz.com.tr -d www.fikrihavuz.com.tr
+        command: certonly --webroot --webroot-path=/var/www/html --email ahmetyumusakdiken13@gmail.com --agree-tos --no-eff-email --preferred-challenges http -d www.fikrihavuz.com.tr -d www.fikrihavuz.com.tr
         volumes:
             - ./certbot/conf:/etc/letsencrypt
             - ./certbot/logs:/var/log/letsencrypt
