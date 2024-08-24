@@ -16,7 +16,7 @@ down:
 	$(CD) $(FCOMPOSE) && $(DOWN)
 
 clean: down
-	$(CD) $(FCOMPOSE) && $(RM_IMAGE) && $(RM_VOLUME) && $(RM_CONTAINER)
+	$(CD) $(FCOMPOSE) && $(RM_IMAGE) && $(RM_VOLUME) && $(RM_CONTAINER) && docker volume rm cloud-1_db_data
 
 reload:
 	bash setIp.sh
