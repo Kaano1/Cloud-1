@@ -1,0 +1,57 @@
+---
+# download the package
+- name: Update
+  ansible.builtin.yum:
+    name: '*'
+    state: latest
+
+- name: install packages
+  ansible.builtin.yum:
+    name: "{{ item }}"
+  loop:
+    - docker
+    - make
+    - wget
+
+- name: install docker-compose
+  ansible.builtin.shell:
+    cmd: sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+
+- name: is there a file?
+  ansible.builtin.stat:
+    path: /home/ec2-user/webapp.zip
+  register: webapp_status
+
+- name: copy webapp
+  ansible.builtin.copy:
+    src: ../webapp.zip
+    dest: /home/ec2-user/webapp.zip
+  when: webapp_status.stat.exists == False
+
+- name: unzip webapp
+  ansible.builtin.shell:
+    cmd: unzip /home/ec2-user/webapp.zip -d /home/ec2-user/webapp
+  when: webapp_status.stat.exists == False
+
+# enable services
+
+- name: to active the docker service
+  ansible.builtin.systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+# create folders
+
+- name: create data/cloud folder
+  ansible.builtin.file:
+    path: /data/cloud
+    state: directory
+    mode: '0777'
+
+- name: create /var/www/html folder
+  ansible.builtin.file:
+    path: /var/www/html
+    state: directory
+    mode: '0777'
+
