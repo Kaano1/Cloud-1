@@ -1,0 +1,27 @@
+---
+# tasks file for core
+- name: reload ip address
+  ansible.builtin.shell:
+    cmd: cd /home/ec2-user/webapp/webapp/ && make reload
+
+- name: docker-compose up
+  ansible.builtin.shell:
+    cmd: cd /home/ec2-user/webapp/webapp/ && make upd
+
+- name: wait to created container
+  ansible.builtin.wait_for:
+    port: 80
+    delay: 10
+    timeout: 60
+
+- name: docker-compose down
+  ansible.builtin.shell:
+    cmd: cd /home/ec2-user/webapp/webapp/ && make down
+
+- name: remove default.conf
+  ansible.builtin.shell:
+    cmd: sudo rm -rf /home/ec2-user/webapp/webapp/src/nginx/conf/default.conf
+
+- name: copy nginx.conf
+  ansible.builtin.shell:
+    cmd: cp /home/ec2-user/webapp/webapp/conf/default.conf /home/ec2-user/webapp/webapp/src/nginx/conf/default.conf
