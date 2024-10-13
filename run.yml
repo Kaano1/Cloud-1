@@ -1,0 +1,7 @@
+---
+- name: cloud-1
+  hosts: all
+  become: true
+  roles:
+    - package-setup
+    - core
