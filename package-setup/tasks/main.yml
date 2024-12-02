@@ -55,3 +55,6 @@
     state: directory
     mode: '0777'
 
+- name: create /etc/nginx/ssl/live/www.fikrihavuz.com.tr folder
+  ansible.builtin.shell:
+    cmd: mkdir -p /etc/nginx/ssl/live/www.fikrihavuz.com.tr

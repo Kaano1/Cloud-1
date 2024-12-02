@@ -4,7 +4,7 @@ RM_VOLUME = docker volume prune -af
 RM_IMAGE = docker image prune -af
 RM_CONTAINER = docker container prune -f
 UP = docker-compose up
-DOWN = docker-compose down
+STOP = docker-compose stop
 
 up:
 	$(CD) $(FCOMPOSE) && $(UP)
@@ -12,8 +12,8 @@ up:
 upd:
 	$(CD) $(FCOMPOSE) && $(UP) -d
 
-down:
-	$(CD) $(FCOMPOSE) && $(DOWN)
+stop:
+	$(CD) $(FCOMPOSE) && $(STOP)
 
 clean: down
 	$(CD) $(FCOMPOSE) && $(RM_IMAGE) && $(RM_VOLUME) && $(RM_CONTAINER)
