@@ -1,26 +1,14 @@
-CD = cd
-FCOMPOSE = ./srcs/wordpress/wp-project/
-RM_VOLUME = docker volume prune -af
-RM_IMAGE = docker image prune -af
-RM_CONTAINER = docker container prune -f
-UP = docker-compose up
-DOWN = docker-compose down
+RM = rm -f
+ZIP = zip -r
+FILE = ./webapp
+ZIP_FILE = webapp.zip
 
-up:
-	$(CD) $(FCOMPOSE) && $(UP)
+all:
+	$(RM) $(ZIP_FILE)
+	$(ZIP) $(ZIP_FILE) $(FILE)
+	ansible-playbook -i hosts.ini run.yml --private-key /home/kaan/myComputer.pem
 
-upd:
-	$(CD) $(FCOMPOSE) && $(UP) -d
+connect:
+	ssh -i /home/kaan/myComputer.pem ec2-user@#IP
 
-down:
-	$(CD) $(FCOMPOSE) && $(DOWN)
-
-clean: down
-	$(CD) $(FCOMPOSE) && $(RM_IMAGE) && $(RM_VOLUME) && $(RM_CONTAINER)
-
-reload:
-	bash setIp.sh
-
-re: clean up
-
-.PHONY: up down clean re
+.PHONY: all
