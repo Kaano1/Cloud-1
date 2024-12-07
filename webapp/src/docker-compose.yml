@@ -25,8 +25,6 @@ services:
             MYSQL_RANDOM_ROOT_PASSWORD: 'root_pass'
         volumes:
           - db_data:/var/lib/mysql
-        ports:
-            - 3306:3306
     nginx:
         container_name: nginx
         image: nginx:latest
@@ -51,9 +49,9 @@ services:
           MYSQL_ROOT_PASSWORD: 'root_pass'
           MYSQL_USER: user
           MYSQL_PASSWORD: 1234
-       ports:
-         - 8080:8080
-       command: /bin/bash -c "sed -i \"s/Listen 80/Listen $$APACHE_HTTP_PORT_NUMBER/g\" /etc/apache2/ports.conf && sed -i \"s/80/$$APACHE_HTTP_PORT_NUMBER/g\" /etc/apache2/sites-available/000-default.conf && /docker-entrypoint.sh apache2-foreground"
+#       ports:
+#         - 8080:8080
+       command: /bin/bash -c "sed -i \"s/Listen 80/Listen ${APACHE_HTTP_PORT_NUMBER}/g\" /etc/apache2/ports.conf && sed -i \"s/80/${APACHE_HTTP_PORT_NUMBER}/g\" /etc/apache2/sites-available/000-default.conf && /docker-entrypoint.sh apache2-foreground"
     certbot:
         container_name: certbot
         image: certbot/certbot:latest
@@ -71,4 +69,3 @@ volumes:
       type: nfs
       o: bind
       device: /data/cloud
-  wordpress_data:

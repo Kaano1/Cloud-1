@@ -13,6 +13,6 @@ all:
 	ansible-playbook -i hosts.ini run.yml --private-key /home/myComputer.pem
 
 connect:
-	ssh -i /home/myComputer.pem ec2-user@16.171.54.208
+	ssh -i /home/myComputer.pem ec2-user@51.20.76.222
 
 .PHONY: all
