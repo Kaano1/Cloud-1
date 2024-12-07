@@ -15,7 +15,7 @@ upd:
 stop:
 	$(CD) $(FCOMPOSE) && $(STOP)
 
-clean: down
+clean: stop
 	$(CD) $(FCOMPOSE) && $(RM_IMAGE) && $(RM_VOLUME) && $(RM_CONTAINER)
 
 reload:
@@ -23,4 +23,4 @@ reload:
 
 re: clean up
 
-.PHONY: up down clean re
+.PHONY: up clean re

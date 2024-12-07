@@ -53,7 +53,7 @@ services:
           MYSQL_PASSWORD: 1234
        ports:
          - 8080:8080
-       command: /bin/bash -c "sed -i \"s/80/$$APACHE_HTTP_PORT_NUMBER/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && /docker-entrypoint.sh apache2-foreground"
+       command: /bin/bash -c "sed -i \"s/Listen 80/Listen $$APACHE_HTTP_PORT_NUMBER/g\" /etc/apache2/ports.conf && sed -i \"s/80/$$APACHE_HTTP_PORT_NUMBER/g\" /etc/apache2/sites-available/000-default.conf && /docker-entrypoint.sh apache2-foreground"
     certbot:
         container_name: certbot
         image: certbot/certbot:latest
