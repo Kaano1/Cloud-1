@@ -40,7 +40,7 @@ EOF
 
 # set hosted zone id
 aws route53 change-resource-record-sets \
-    --hosted-zone-id Z07862153UGPAZO830ETD \
+    --hosted-zone-id Z04559192E3Q6MZ82FU3Z \
     --change-batch file://$JSON_FILE
 
 rm $JSON_FILE
